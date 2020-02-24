@@ -5,10 +5,10 @@ from app import *
 class Redis(object):
     def __init__(self):
         self.RedisConnect = redis.Redis(
-            host=app.config['REDIS_ADDR'],
-            port=app.config['REDIS_PORT'],
-            db=app.config['REDIS_DB'],
-            password=app.config['REDIS_PASSWORD'],
+            host=app.config['REDIS_CONFIG'].get('host'),
+            port=app.config['REDIS_CONFIG'].get('port'),
+            db=app.config['REDIS_CONFIG'].get('db'),
+            password=app.config['REDIS_CONFIG'].get('password'),
             decode_responses=True
         )
 

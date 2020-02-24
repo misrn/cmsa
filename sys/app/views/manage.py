@@ -28,12 +28,12 @@ def login():
         token = str(uuid.uuid1())
 
         if redis.exists(user_login_lock_redis_key):
-            if int(redis.get(user_login_lock_redis_key)) >= 3:
+            if int(redis.get(user_login_lock_redis_key)) >= int(app.config['LOGIN_CONFIG'].get('failed_max')):
                 logging.debug("用户: " + str(user_name + " 密码连续输入错误已达限制"))
                 return json.dumps({"code": 406, "msg": "账户密码连续输入错误已达限制，请稍后再试!"})
         else:
             redis.set(user_login_lock_redis_key, 0)
-            redis.expire(user_login_lock_redis_key, 600)
+            redis.expire(user_login_lock_redis_key, int(app.config['LOGIN_CONFIG'].get('lock_time')))
 
         user_info = User.query.filter_by(user_name=user_name).first()
         if user_info is not None:
@@ -66,7 +66,7 @@ def login():
                 db.session.commit()
                 return json.dumps({"code": 200, "msg": "", "token": token, "display_name": display_name})
         redis.set(user_login_lock_redis_key, int(redis.get(user_login_lock_redis_key)) + 1)
-        redis.expire(user_login_lock_redis_key, 600)
+        redis.expire(user_login_lock_redis_key, int(app.config['LOGIN_CONFIG'].get('lock_time')))
         return json.dumps({"code": 406, "msg": "账户密码错误!"})
     except Exception as Error:
         logging.error(Error)

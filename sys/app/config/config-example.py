@@ -1,55 +1,41 @@
 # -*- coding: utf-8 -*-
 
-# 监听地址
-BIND = '127.0.0.1'
-# 监听端口, 容器运行时未指定，默认19090
-PORT = 19090
+BIND = '0.0.0.0'
+PORT = 5000
 
-# 数据库信息
+DEBUG = True
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 CSRF_ENABLED = True
-SECRET_KEY = 'vT1cWp5xdWoEhd8gdVuqFWnErA3gT9xqMa573yS8twnEEFW8'
+SECRET_KEY = 'asdfghjkl'
+
+# 数据库配置
 SQLALCHEMY_POOL_SIZE = 100
 SQLALCHEMY_POOL_RECYCLE = 10
 SQLALCHEMY_POOL_TIMEOUT = 3000
-SQLALCHEMY_DATABASE_URI = 'mysql://<user>:<password>@<host>:<port>/<dbname>'
+SQLALCHEMY_DATABASE_URI = 'mysql://root:password@127.0.0.1:3306/cmsa'
 
 
-# Redis 地址
-REDIS_ADDR =
-# Redis 端口, 容器运行时未指定，默认6379
-REDIS_PORT = 6379
-# Redis 库, 容器运行时未指定，默认8
-REDIS_DB = 8
-# Redis 密码
-REDIS_PASSWORD =
+# failed_max: 登录最大失败次数; lock_time:达到最大次数锁定时间,单位秒
+LOGIN_CONFIG = {
+    'failed_max': 3,
+    'lock_time': 600
+}
 
-# 事件超时时间，超过这时间将会通知到下位值班人员，单位秒；, 容器运行时未指定，默认1800
-EVENT_TIMEOUT = 1800
+# REDIS配置
+REDIS_CONFIG = {
+    'host': '127.0.0.1',
+    'port': 6379,
+    'db': 9,
+    'password': 'password'
+}
 
-# 是否启用邮件通知 True/False
-MAIL_ENABLE = False
-# 邮件帐户，当MAIL_ENABLE为True，必填
-MAIL_USER = ''
-# 邮件密码，当MAIL_ENABLE为True，必填
-MAIL_PASS = ''
-# 邮件服务器地址，当MAIL_ENABLE为True，必填
-MAIL_HOST = ''
-# 邮件服务器端口, 容器运行时未指定，默认465
-MAIL_PORT = 465
 
-# 是否启用微信通知 True/False
-WECHAT_ENABLE = False
-# 微信 APPID，当WECHAT_ENABLE为True，必填
-WECHAT_APPID = ''
-# 微信 SECRET，当WECHAT_ENABLE为True，必填
-WECHAT_SECRET = ''
-# 微信消息发送模板ID，当WECHAT_ENABLE为True，必填
-WECHAT_TEAMPLATE_ID = ''
-
-# 是否启用电话通知
-PHONE_ENABLE = False
-# 电话接口地址，当PHONE_ENABLE为True，必填
-PHONE_HOST = ''
-# 电话接口 APPCODE，当PHONE_ENABLE为True，必填
-PHONE_APPCODE = ''
+# LDAP服务器配置
+LDAP_CONFIG = {
+    'host': 'ldap://127.0.0.1:389',
+    'base_dn': 'dc=test,dc=cn',
+    'people_dn': 'ou=People,dc=test,dc=cn',
+    'user': 'cn=Manager,dc=test,dc=cn',
+    'password': 'password',
+    'login': True
+}
