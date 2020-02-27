@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-from ldap3 import Connection, Server, ALL, MODIFY_ADD, MODIFY_REPLACE, MODIFY_DELETE
+from ldap3 import Connection, Server, ALL
 from app import *
 
 
@@ -46,3 +46,45 @@ class Ldap:
         ldap_server = Server(app.config["LDAP_CONFIG"].get('host'), get_info=ALL)
         ldap_connect = Connection(ldap_server, user=ldap_user_dn, password=password)
         return ldap_connect.bind()
+
+    def add(self, dn, _class, attributes):
+        """
+        LDAP 添加数据
+        :param dn: 唯一DN
+        :param _class: objectClass 对象列表
+        :param attributes: json格式数据
+        :return: 布尔值
+        """
+        try:
+            self.connection.add(dn, _class, attributes)
+            return True
+        except Exception as Error:
+            logging.error(Error)
+            return False
+
+    def delete(self, dn):
+        """
+        LDAP 删除数据
+        :param dn: 唯一DN
+        :return:
+        """
+        try:
+            self.connection.delete(dn)
+            return True
+        except Exception as Error:
+            logging.error(Error)
+            return False
+
+    def modify(self, dn, data):
+        """
+        LDAP 数据DN数据，可新增/删除/修改
+        :param dn: 唯一DN
+        :param data: json格式数据   {'host': [(MODIFY_DELETE, [host])]} ; MODIFY_DELETE/MODIFY_ADD/MODIFY_REPLACE
+        :return:
+        """
+        try:
+            self.connection.modify(dn, data)
+            return True
+        except Exception as Error:
+            logging.error(Error)
+            return False
