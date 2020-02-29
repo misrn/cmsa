@@ -1,4 +1,3 @@
 # coding=utf-8
-from flask import Blueprint
-
-Api = Blueprint('api', __name__)
+from .blueprint import Api
+from . import ldap, index
